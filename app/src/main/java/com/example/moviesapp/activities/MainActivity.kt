@@ -1,15 +1,15 @@
-package com.example.moviesapp
+package com.example.moviesapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.moviesapp.R
 import com.example.moviesapp.data.MovieServiceInterface
 import com.example.moviesapp.data.RetrofitClient
 import com.example.moviesapp.models.MovieResponse
 import com.example.moviesapp.ui.MovieRecyclerViewAdapter
 import com.example.moviesapp.util.Utils
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
