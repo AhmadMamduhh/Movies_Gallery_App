@@ -19,7 +19,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         ratingText2.text = bundle?.getString("Rating")
         val unformattedDate = bundle?.getString("Release Date")
         var formattedDate = "${unformattedDate?.substring(8,10)}-${unformattedDate?.substring(5,7)}-" +
-                "${unformattedDate?.substring(0,4)}"
+                "${unformattedDate?.substring(0,4)} "
         releaseDateText.text = formattedDate
 
 
