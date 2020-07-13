@@ -7,12 +7,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesapp.R
 import com.example.moviesapp.models.Movie
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.movie_item_layout.view.*
 
 class MovieRecyclerViewAdapter(var context: Context, var moviesList : List<Movie>) :
     RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder>() {
 
 
-    class MovieViewHolder(var movieItemView: View) : RecyclerView.ViewHolder(movieItemView) {
+   inner class MovieViewHolder(var movieItemView: View) : RecyclerView.ViewHolder(movieItemView) {
+       var movieImage = movieItemView.moviePosterImage
+       var movieRating = movieItemView.ratingText1
+
+       fun bindMovieItem(imageUri : String, rating : String){
+           Picasso.get().load("https://image.tmdb.org/t/p/w300/$imageUri").into(movieImage)
+           movieRating.text = rating
+
+       }
 
     }
 
@@ -28,5 +38,6 @@ class MovieRecyclerViewAdapter(var context: Context, var moviesList : List<Movie
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        holder.bindMovieItem(moviesList[position].posterPath, moviesList[position].voteAverage )
     }
 }

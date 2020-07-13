@@ -6,10 +6,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MovieServiceInterface {
-    @GET("/movie/popular")
+    @GET("movie/popular")
     fun getPopularMovies(@Query("api_key") apiKey: String): Call<MovieResponse>
 
-    @GET("/movie/top_rated")
+    @GET("movie/top_rated")
     fun getTopRatedMovies(@Query("api_key") apiKey: String): Call<MovieResponse>
 
 }
