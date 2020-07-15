@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="#002530"
+    android:background="@drawable/gradient_background"
     android:paddingBottom="5dp">
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,8 +16,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/imageCardView"
-        android:layout_width="309dp"
-        android:layout_height="249dp"
+        android:layout_width="230dp"
+        android:layout_height="290dp"
         android:backgroundTint="#09464E"
         app:cardCornerRadius="13dp"
         app:cardElevation="3dp"
@@ -31,6 +31,7 @@
             android:id="@+id/posterImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:adjustViewBounds="true"
             android:scaleType="fitXY"
             tools:src="@drawable/ic_launcher_foreground" />
 
@@ -40,11 +41,12 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/cinzel"
         android:textAlignment="center"
-        android:textSize="26sp"
         android:textColor="#ffffff"
+        android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"

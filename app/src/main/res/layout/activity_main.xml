@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#002530"
+    android:background="@drawable/gradient_background"
     tools:context=".activities.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,11 +25,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/cinzel"
         android:text="Movies Gallery"
-        android:textSize="36sp"
-        android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="#00F7FF"
+        android:textSize="36sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
