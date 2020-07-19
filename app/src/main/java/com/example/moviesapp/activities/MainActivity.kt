@@ -2,41 +2,33 @@ package com.example.moviesapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.example.moviesapp.R
-import com.example.moviesapp.data.MovieServiceInterface
-import com.example.moviesapp.data.RetrofitClient
 import com.example.moviesapp.models.Movie
-import com.example.moviesapp.models.MovieResponse
-import com.example.moviesapp.repositries.MovieRepositry
-import com.example.moviesapp.repositries.MovieRepositryInterface
 import com.example.moviesapp.ui.MovieRecyclerViewAdapter
-import com.example.moviesapp.util.Utils
+import com.example.moviesapp.viewmodels.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class MainActivity : AppCompatActivity(), MovieRepositryInterface {
+class MainActivity : AppCompatActivity(){
+    val mainActivityViewModel : MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        MovieRepositry.getPopularMovies(this,this)
-        MovieRepositry.getTopRated(this, this)
+        mainActivityViewModel.getPopularMovies().observe(this)
+        { movies ->
+            val recyclerAdapter = MovieRecyclerViewAdapter(this, movies)
+            popularRecyclerView.adapter = recyclerAdapter
+        }
+        mainActivityViewModel.getTopRatedMovies().observe(this)
+        {movies ->  val recyclerAdapter = MovieRecyclerViewAdapter(this, movies)
+                topRatedRecyclerView.adapter = recyclerAdapter}
+
 
     }
 
-    override fun getPopularMovies(movieList: List<Movie>) {
-        popularRecyclerView.adapter = MovieRecyclerViewAdapter(
-            this@MainActivity, movieList)
-    }
 
-    override fun getTopRatedMovies(movieList: List<Movie>) {
-        topRatedRecyclerView.adapter = MovieRecyclerViewAdapter(
-            this@MainActivity, movieList)
-
-    }
 }
 

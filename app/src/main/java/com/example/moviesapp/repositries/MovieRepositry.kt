@@ -3,6 +3,8 @@ package com.example.moviesapp.repositries
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.moviesapp.data.MovieServiceInterface
 import com.example.moviesapp.data.RetrofitClient
 import com.example.moviesapp.models.Movie
@@ -19,13 +21,12 @@ object MovieRepositry {
     var popularMoviesList: MutableList<Movie> = mutableListOf()
     var topRatedMoviesList: MutableList<Movie> = mutableListOf()
 
-    fun getPopularMovies(
-        movieRepositryInterface: MovieRepositryInterface,
-        context: Context
-    ) {
+    fun getPopularMovies(): LiveData<List<Movie>>{
+        val mutableLiveData = MutableLiveData<List<Movie>>()
 
         if (popularMoviesList.size > 0) {
-             movieRepositryInterface.getPopularMovies(popularMoviesList)
+            mutableLiveData.postValue(popularMoviesList)
+            return mutableLiveData
 
         } else {
             val retrofit = RetrofitClient.getRetrofitClient()
@@ -35,10 +36,6 @@ object MovieRepositry {
                 object : Callback<MovieResponse> {
                     override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                         Log.d("failure", t.message)
-                        Toast.makeText(
-                            context,
-                            "Something went wrong!", Toast.LENGTH_SHORT
-                        ).show()
                     }
 
                     override fun onResponse(
@@ -47,14 +44,11 @@ object MovieRepositry {
                     ) {
                         if (response.isSuccessful) {
                             popularMoviesList.addAll(response.body()?.results!!)
-                            movieRepositryInterface.getPopularMovies(popularMoviesList)
+                            mutableLiveData.postValue(popularMoviesList)
 
                         } else {
                             Log.d("failure", response.code().toString())
-                            Toast.makeText(
-                                context,
-                                "There was a problem in obtaining the movies!", Toast.LENGTH_SHORT
-                            ).show()
+
                         }
 
                     }
@@ -63,12 +57,15 @@ object MovieRepositry {
             )
 
         }
+        return mutableLiveData
     }
 
-    fun getTopRated(movieRepositryInterface: MovieRepositryInterface, context: Context) {
+    fun getTopRated(): LiveData<List<Movie>>{
+        val mutableLiveData = MutableLiveData<List<Movie>>()
 
         if(topRatedMoviesList.size > 0) {
-            movieRepositryInterface.getTopRatedMovies(topRatedMoviesList)
+            mutableLiveData.postValue(topRatedMoviesList)
+            return mutableLiveData
         }
         else {
 
@@ -79,10 +76,6 @@ object MovieRepositry {
                 object : Callback<MovieResponse> {
                     override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                         Log.d("failure", t.message)
-                        Toast.makeText(
-                            context,
-                            "Something went wrong!", Toast.LENGTH_SHORT
-                        ).show()
                     }
 
                     override fun onResponse(
@@ -91,14 +84,10 @@ object MovieRepositry {
                     ) {
                         if (response.isSuccessful) {
                             topRatedMoviesList.addAll(response.body()?.results!!)
-                            movieRepositryInterface.getTopRatedMovies(topRatedMoviesList)
+                            mutableLiveData.postValue(topRatedMoviesList)
 
                         } else {
                             Log.d("failure", response.code().toString())
-                            Toast.makeText(
-                                context,
-                                "There was a problem in obtaining the movies!", Toast.LENGTH_SHORT
-                            ).show()
                         }
 
                     }
@@ -106,5 +95,6 @@ object MovieRepositry {
                 }
             )
         }
+        return mutableLiveData
     }
 }
