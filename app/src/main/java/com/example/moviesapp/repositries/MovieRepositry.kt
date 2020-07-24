@@ -1,5 +1,6 @@
 package com.example.moviesapp.repositries
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -7,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moviesapp.data.MovieServiceInterface
 import com.example.moviesapp.data.RetrofitClient
+import com.example.moviesapp.database.MoviesDatabase
 import com.example.moviesapp.models.Movie
 import com.example.moviesapp.models.MovieResponse
 import com.example.moviesapp.ui.MovieRecyclerViewAdapter
@@ -20,6 +22,7 @@ object MovieRepositry {
 
     var popularMoviesList: MutableList<Movie> = mutableListOf()
     var topRatedMoviesList: MutableList<Movie> = mutableListOf()
+    var database : MoviesDatabase? = null
 
     fun getPopularMovies(): LiveData<List<Movie>>{
         val mutableLiveData = MutableLiveData<List<Movie>>()
@@ -28,7 +31,12 @@ object MovieRepositry {
             mutableLiveData.postValue(popularMoviesList)
             return mutableLiveData
 
-        } else {
+        }
+        else if(getLocalPopularMovies().isNotEmpty()){
+            popularMoviesList = getLocalPopularMovies() as MutableList<Movie>
+            mutableLiveData.postValue(popularMoviesList)
+        }
+
             val retrofit = RetrofitClient.getRetrofitClient()
             val service = retrofit.create(MovieServiceInterface::class.java)
 
@@ -43,7 +51,12 @@ object MovieRepositry {
                         response: Response<MovieResponse>
                     ) {
                         if (response.isSuccessful) {
-                            popularMoviesList.addAll(response.body()?.results!!)
+                            val tempList = response.body()?.results!!
+                            for(movie in tempList){
+                                movie.type = "popular"
+                            }
+                            popularMoviesList.addAll(tempList)
+                            database?.moviesDao()?.insertMoviesList(popularMoviesList)
                             mutableLiveData.postValue(popularMoviesList)
 
                         } else {
@@ -56,7 +69,6 @@ object MovieRepositry {
                 }
             )
 
-        }
         return mutableLiveData
     }
 
@@ -67,7 +79,10 @@ object MovieRepositry {
             mutableLiveData.postValue(topRatedMoviesList)
             return mutableLiveData
         }
-        else {
+        else if(getLocalRatedMovies().isNotEmpty()){
+            topRatedMoviesList = getLocalRatedMovies() as MutableList<Movie>
+            mutableLiveData.postValue(topRatedMoviesList)
+        }
 
 
             val retrofit = RetrofitClient.getRetrofitClient()
@@ -83,7 +98,12 @@ object MovieRepositry {
                         response: Response<MovieResponse>
                     ) {
                         if (response.isSuccessful) {
-                            topRatedMoviesList.addAll(response.body()?.results!!)
+                            val tempList = response.body()?.results!!
+                            for(movie in tempList){
+                                movie.type = "top_rated"
+                            }
+                            topRatedMoviesList.addAll(tempList)
+                            database?.moviesDao()?.insertMoviesList(topRatedMoviesList)
                             mutableLiveData.postValue(topRatedMoviesList)
 
                         } else {
@@ -94,7 +114,18 @@ object MovieRepositry {
 
                 }
             )
-        }
         return mutableLiveData
+    }
+
+    fun createDatabase(app : Application){
+        database = MoviesDatabase.getDatabase(app.applicationContext)
+    }
+
+    fun getLocalPopularMovies() : List<Movie>{
+        return database?.moviesDao()?.getLocalPopularMovies() as List<Movie>
+    }
+
+    fun getLocalRatedMovies() : List<Movie>{
+        return database?.moviesDao()?.getLocalTopRatedMovies() as List<Movie>
     }
 }

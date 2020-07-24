@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -49,12 +50,21 @@ dependencies {
 
     // Picasso Dependencies
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Recycler View
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    // Card View
     implementation 'androidx.cardview:cardview:1.0.0'
 
     // MVVM Dependencies
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation "androidx.activity:activity-ktx:1.1.0"
+
+    // Room Database
+    implementation "androidx.room:room-runtime:2.2.5"
+    kapt "androidx.room:room-compiler:2.2.5"
+
 
 }
